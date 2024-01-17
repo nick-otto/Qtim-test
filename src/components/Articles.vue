@@ -33,7 +33,7 @@
           </router-link>
         </div>
 
-        <button @click="backPage" class="paginate-buttons">
+        <button v-if="false" @click="backPage" class="paginate-buttons">
           prev
         </button>
 
@@ -47,7 +47,7 @@
           {{ item }}
         </button>
 
-        <button @click="nextPage" class="paginate-buttons">
+        <button v-if="false" @click="nextPage" class="paginate-buttons">
           next
         </button>
 
@@ -163,6 +163,7 @@ onMounted(async () => {
         margin-top: 12px;
         opacity: 0;
         transition: all 0.25s ease-in-out;
+        color: #E2BEFF;
 
         &:hover {
           cursor: pointer;
@@ -181,26 +182,27 @@ onMounted(async () => {
 }
 
 .paginate-buttons {
-  height: 40px;
-  width: 40px;
-  border-radius: 20px;
+  height: 44px;
+  width: 44px;
+  border-radius: 12px;
   cursor: pointer;
+  margin: 0 4px;
   background-color: rgb(242, 242, 242);
-  border: 1px solid rgb(217, 217, 217);
-  color: black;
+  border: none;
+  color: #101010;
 }
 
 .paginate-buttons:hover {
-  background-color: #d8d8d8;
+  background-color: #F3F3F3;
 }
 
 .active-page {
-  background-color: #3498db;
-  border: 1px solid #3498db;
+  background-color: #101010;
+  //border: 1px solid #3498db;
   color: white;
 }
 
 .active-page:hover {
-  background-color: #2988c8;
+  background-color: #101010;
 }
 </style>
