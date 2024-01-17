@@ -37,16 +37,10 @@
             :items-per-page="8"
             :max-pages-shown="5"
             v-model="currentPage"
-            :on-click="onClickHandler"
-            class="articles__pagination"
-            paginate-buttons-class="btn"
-            active-page-class="btn-active"
-            back-button-class="back-btn"
-            next-button-class="next-btn"
+            @click="onClickHandler"
         />
       </template>
-
-
+      
     </div>
   </section>
 </template>
@@ -150,9 +144,6 @@ onMounted(async () => {
         }
       }
     }
-  }
-  .btn {
-    color: red;
   }
 }
 
