@@ -11,9 +11,10 @@
         </div>
       </template>
 
-      <template v-else>
+
+      <template v-else-if="getData">
         <div class="articles-block-wrapper">
-          <router-link v-for="post in posts"
+          <router-link v-for="post in paginatedData"
                        :key="post?.id"
                        :to="post?.id"
                        class="articles-block"
@@ -32,15 +33,30 @@
           </router-link>
         </div>
 
-        <vue-awesome-paginate
-            :total-items="Number(posts?.length)"
-            :items-per-page="8"
-            :max-pages-shown="5"
-            v-model="currentPage"
-            @click="onClickHandler"
-        />
+        <button @click="backPage" class="paginate-buttons">
+          prev
+        </button>
+
+        <button
+            v-for="item in Math.ceil(getData.length / perPage)"
+            :key="item"
+            class="paginate-buttons"
+            :class="{'active-page': page === item}"
+            @click="() => goToPage(item)"
+        >
+          {{ item }}
+        </button>
+
+        <button @click="nextPage" class="paginate-buttons">
+          next
+        </button>
+
       </template>
-      
+
+      <template v-else>
+        Empty Data
+      </template>
+
     </div>
   </section>
 </template>
@@ -48,19 +64,27 @@
 <script setup>
 import {onMounted, ref} from "vue";
 
-const posts = ref(null)
+// Hooks
+import pagination from "@/hooks/pagination.js";
+
+const {
+  page,
+  setData,
+  getData,
+  paginatedData,
+  perPage,
+  nextPage,
+  backPage,
+  goToPage
+} = pagination()
+
 const loading = ref(false)
-const currentPage = ref(1);
-const onClickHandler = (currentPage) => {
-  getPosts(currentPage)
-};
 const loaderStart = () => loading.value = true
 const loaderStop = () => loading.value = false
 
-const getPosts = async (currentPage) => {
+const getPosts = async () => {
   try {
     loaderStart()
-    // const data = await fetch(`https://6082e3545dbd2c001757abf5.mockapi.io/qtim-test-work/posts?per_page=8&page=${currentPage || 1}`)
     const data = await fetch(`https://6082e3545dbd2c001757abf5.mockapi.io/qtim-test-work/posts`)
     return data.json()
   } catch (error) {
@@ -70,7 +94,8 @@ const getPosts = async (currentPage) => {
   }
 }
 onMounted(async () => {
-  posts.value = await getPosts()
+  const posts = await getPosts()
+  setData(posts)
 })
 </script>
 
@@ -153,5 +178,29 @@ onMounted(async () => {
   display: flex;
   align-items: flex-start;
   justify-content: center;
+}
+
+.paginate-buttons {
+  height: 40px;
+  width: 40px;
+  border-radius: 20px;
+  cursor: pointer;
+  background-color: rgb(242, 242, 242);
+  border: 1px solid rgb(217, 217, 217);
+  color: black;
+}
+
+.paginate-buttons:hover {
+  background-color: #d8d8d8;
+}
+
+.active-page {
+  background-color: #3498db;
+  border: 1px solid #3498db;
+  color: white;
+}
+
+.active-page:hover {
+  background-color: #2988c8;
 }
 </style>
